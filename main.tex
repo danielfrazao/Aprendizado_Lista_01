@@ -1,0 +1,231 @@
+\documentclass[a4paper, 12pt]{article}
+
+\usepackage[portuges]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{parskip}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage[section]{placeins}
+\usepackage{natbib}
+\usepackage{pdfpages}
+\usepackage{subcaption}
+\usepackage{unicode-math}
+\usepackage{dsfont}
+\usepackage{ upgreek }
+
+\begin{document}
+\begin{titlepage}
+	\begin{center}
+		\huge{Universidade Federal do Amazonas}
+
+\vspace{10pt}
+
+        
+        \vspace{85pt}
+        
+		\textbf{\LARGE{Aprendizado de Máquinas}}\vspace{2pt}
+		\large{\\
+        		Lista Exercício 01 - Classificadores Probabilísticos}
+		\vspace{160pt}
+		
+	\end{center}
+	
+	\begin{flushleft}
+		\begin{tabbing}
+			Aluno:\qquad\qquad\= Daniel Frazão Luiz\\
+			\\			Matrícula:\qquad\ 3200022\\
+			\\Professor\> Cícero Ferreira Fernandes Costa Filho\\
+
+		
+	\end{tabbing}
+		  
+	\end{flushleft}
+	
+	\begin{center}
+		\vspace{\fill}
+		\today
+	\end{center}
+\end{titlepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\thispagestyle{empty}
+\pagenumbering{arabic}
+
+\section{Questões}
+
+\subsection{Problema 2.1}
+
+Considerando que a probabilidade de descisão foi dada :
+
+$P_c = \sum_{i=1}^M P(x \in R_i,w_i)
+
+Sabendo que x $\in$ $R_i$, então sabemos que $x$ vem da classe $w_i$
+
+$P(x\in R_i,w_i)=P(x\in R_i|w_i) = (\int_R_i p(x|w_i)dx)$
+
+$Pc = \sum_{i=1}^M(\int_R_i p(x|w_i) = (\int_R_i p(x|w_i)P(w_i)dx))$
+
+Sendo $R_i$ como parte de x, temos: 
+
+$p(x|w_i)P(w_i) > p(x|w_j)P(w_j) $  $\forall j \neq i $ 
+
+Podemos aplicar Bayes para simplificação e obtenção do limite de decisão :
+
+$p(x|w_i) > p(w_j|x) $  $\forall j \neq i $ \\
+
+\subsection{Problema 2.2}
+
+Seja $\lamb_{ki}$ a perda associada de um objeto da classe $i$, sabendo disso podemos escrever um problema com duas classes, da seguinte forma :
+\\ \\
+$l1 = \lambda_{11}p(x|w1)P(w_1)+\lambda{21}p(x|w2)P(w2)$ \\
+$l2 = \lambda_{12}p(x|w1)P(w_1)+\lambda{22}p(x|w2)P(w2)$ \\
+
+Sabendo que  $\lambda_{11} = \lambda_{22} = 0 : $ \\
+
+$l1 = \lambda_{21}p(x|w2)P(w2)$ \\
+$l2 = \lambda_{12}p(x|w1)P(w1)$ \\
+
+Se $l_1 < l_2$ x é classificado em $w_1$ senão na $w_2$, e quando $l_1$ = $l_2$ temos o limite de decisão.\\
+
+$\frac{p(x|w1)}{p(x|w2)} = \frac{\lambda_{21}P(w2)}{\lambda_{12}P(w1)}$
+
+Seja $p(x|w_1) \simeq N(0,\sigma^2)$ e $p(x|w_2) \simeq N(1,\sigma^2)$ temos:\\
+$\frac{p(x|w1)}{p(x|w2)} = \frac{e^{-\frac{1}{2}\frac{x^2}{\sigma^2}}}{e^{-\frac{1}{2}\frac{(x-1)^2}{\sigma^2} }} = exp\big{\{}-\frac{1}{2}\frac{1}{\sigma^2}(2x-1)\big{\}}$
+
+$x = \frac{1}{2} - \sigma^2 ln\big{(}\frac{\sigma_{21}P(w2)}{\sigma_{12}P(w1)}\big{)}$
+
+\subsection{Problema 2.3}
+\\ \\
+Seja o erro condicional $\upvarepsilon_1$ e $\upvarepsilon_2$ \\ \\
+$\upvarepsilon_1 = P(x \in R2|w1) = \int_{R_2} p(x|w1)dx$
+
+$\upvarepsilon_2 = P(x \in R1|w2) = \int_{R_1} p(x|w2)dx$
+\\ \\
+Como o problema tem duas classes, o risco médio vai ser a soma de seus somatórios :
+\\ \\
+$r = P(w_1) (\lambda_{11} \int_{R_1} p(x|w_1)dx + \lambda_{12} \int_{R_2} p(x|w_1)dx) $
+
+$+  P(w_2) (\lambda_{21} \int_{R_1} p(x|w_2)dx + \lambda_{22} \int_{R_2} p(x|w_2)dx)$
+
+
+$ = P(w_1)(\lambda_{11}(1- \int_{R_2} p(x|w_1)dx + \lambda_{12} \int_{R_2} p(x|w_1)dx)$
+
+$+ P(w_2) (\lambda_{21} \int_{R1} p(x|w_2)dx + \lambda_{22} (1- \int_{R1} p(x|w_2)dx))$
+
+$= \lambda_{11}P(w_1) - \lambda_{11}\upvarepsilon_1 P(w_1) + \lambda_{21}\upvarepsilon_2 P(w_2) + \lambda_{22}P(w1) - \lambda_{22}\upvarepsilon_2 P(w_2)$
+\\ \\
+Por fim, temos a solução :
+\\ \\
+$ = \lambda_{11}P(w_1) + \lambda_{22}P(w_2) + (\lambda_{12}-\lambda_{11})\upvarepsilon_1 P(w_1) + (\lambda_{12}-\lambda_{22}\upvarepsilon_2 P(w_2)$
+
+\subsection{Problema 2.4}
+\\ \\
+Dado $\sum_{i=1}^M P(w_i|x) = 1$, sabe-se que ao menos um $P(w_i|x)$ é maior que $\frac{1}{M}$
+\\ \\
+$P(w_{i*} | x) = max_i P(w_i|x)$
+
+$P(w_{i*} | x) = max_i P(w_i|x) \geq \frac{1}{M}$
+
+Então com isso, podemos obter o valor de $P_c$:
+
+$P_c = 1 - max_i P(w_i|x) \leq 1 - \frac{1}{M} = \frac{M-1}{M}$
+
+$P_c \leq \frac{M-1}{M} $
+
+\subsection{Problema 2.5}
+\\ \\ 
+Seja o nosso problema de duas classes :
+\\ \\
+$l_{12} = \frac{p(x|w_1)}{p(x|w_2)} = \frac{\sigma^2_2}{\sigma^2_1} exp \{ -\frac{x^2}{1}(\frac{1}{\sigma^2_1 - \frac{1}{\sigma^2_2}} )\}$
+\\ \\
+Comparamos com o limite $t$, da seguinte forma :
+\\ \\
+$t = \frac{P(w_2)}{P(w_1)}(\frac{\lambda_{21} - \lambda_{22}}{\lambda_{12}-\lambda_{11}})$
+\\ \\
+Se $l_{12}>t$ é classificado em $w_1$.\\
+Se $l_{12}<t$ é classificado em $w_2$.\\
+Ponto de decisão $l_{12}(x_0)=t$
+\\ \\ 
+$exp\{-\frac{x^2_0}{2} ( \frac{\sigma^2_2 - \sigma^2_1}{\sigma^2_1\sigma^2_2})\} = \frac{\sigm^2_1}{\sigm^2_2}t$
+
+$x^2_0 = \pm \frac{2\sigma^2_1\sigma^2_2}{(\sigm^2_2 - \sigma^2_1)} ln (\frac{\sigma^2_1P(w_2)}{\sigma^2_2 P(w_1)} (\frac{\lambda_{21} - \lambda_{22}}{\lambda_{12}-\lambda_{11}}))$
+\\ \\
+Podemos atribuir valores para $l_{12}$ para um $x$, tal que $|x|\leq|X_0|$, de forma que $l_{12}$ seja menor que $t$, sendo assim classificado como $w_1$, no caso de $|x|>|X_0|$, será classificado na classe $w_2$.
+\\ \\
+\subsection{Problema 2.7}
+\\ \\
+O vetor $[1.6,1.5]^T$ é foi cllassificado como classe 2, depois de análise no MatLab.
+
+\\ \\
+\subsection{Problema 2.10}
+\\ \\
+Aplicando logaritmo na equação fornecida, temos:
+\\ \\
+$ln (\frac{p(x|w_1)}{p(x|w_2)}) > ln \theta$
+
+$ln(p(x|w_1))- ln(p(x|w_2)) > ln(\theta)$
+\\ \\
+Sabendo que $p(x|w_i)$ é dado pela densidade multidimensional, temos:
+\\ \\
+$p(x|w_i) = N(x;\mu_i,\sum_i) \equiv \frac{1}{(2\pi)^{\frac{d}{2}}|\sum_i|^{\frac{1}{2}}}exp\{-\frac{1}{2}(x-\mu_i)^t\sum_i^{-1}(x-\mu_i) \}
+
+$ln(p(x|w_i)) = - \frac{1}{2}(x-\mu_i)^t \sum_i^{-1} (x-\mu_i)-\frac{d}{2} ln(2\pi) -\frac{1}{2} ln(|\sum_i|)$
+
+$= -\frac{1}{2}d_m(\mu_i,x|\sum_i)^2 - \frac{d}{2} ln(2\pi) - \frac{1}{2}ln(|\sum_i|)$
+\\ \\
+A distância Mahalanobis é $d_m$, então temos:
+\\ \\
+$-\frac{1}{2}d_m(\mu_1,x|\sum_1)^2 - \frac{1}{2}ln(|\sum_1|)+\frac{1}{2}d_m(\mu_2,x|\sum_2)^2 + \frac{1}{2}ln(|\sum_2|)>ln(\theta)$
+
+$= d_m(\mu_1,x|\sum_1)^2-d_m(\mu_2,x|\sum_2)^2 +ln(\frac{|\sum_1|}{|\sum_2|} < - 2ln(\theta)$
+
+\subsection{Problema 2.11}
+\\ \\
+Sabendo que as covariâncias são : $|\sum_1|=|\sum_2$, e portanto $ln(\frac{|\sum_1|}{|\sum_2|})=0$, temos que:
+\\ \\
+$dm(\mu_1,x\sum_1)^2-d_m(\mu_2,x|\sum_2)^2 = (x^T\sum^{-1}x-2x^T\sum^{-1}\mu_1+\mu_1^T\sum^{-1}\mu_1)$
+
+$- x^T\sum^{-1}x-2x^T\sum^{-1}\mu_2+\mu_2^T\sum^{-1}\mu_2)$
+
+$= -2x^T\sum^{-1}(\mu_1-\mu_2)+\mu_1^T\sum^{-1}\mu_1-\mu_2\sum^{-1}\mu_2$
+
+$(\mu_1-\mu_2)^T\sum^{-1}x>ln(\theta)+\frac{1}{2}||\mu_1||^2_{\sum^{-1}}-\frac{1}{2}||\mu_2||^2_{\sum^{-1}}$
+
+\subsection{Problema 2.16}
+\\ \\
+O problema nos pede para mostrar :
+\\ \\
+$\frac{\partialln(p(x:\theta))}{\partial \theta} = 0$
+\\ \\
+Então, temos:
+\\ \\
+$ E\big{[}\frac{\partial(p(x:\theta))}{\partial\theta}\big{]} = E\big{[} \frac{1}{p(x:\theta} \frac{\partial(x:\theta)}{\partial\theta}\big{]}$
+
+$= \big{\int(\frac{1}{p(x:\theta} \frac{\partial p(x:\theta)}{\partial\theta}) }p(x:\theta)dx$
+
+$= \big{\int \frac{\partial p(x:\theta)}{\partial\theta}dx }$
+
+$= \frac{\partial}{\partial\theta}\int p(x:\theta)dx=\frac{\partial}{\partial\theta}1 = 0$
+
+\subsection{Problema 2.17}
+\\ \\
+Iterando o produto N vezes, temos:
+\\ \\
+$P(X:q)=\prod_{i=1}^N q^{x_i} (1-q)^{(1-x_i)}$
+\\ \\
+Usando logaritmo, temos:
+\\ \\
+$ln(P(X:q)) = \sum_{i=1}^N ln(q^{x_i}(1-q)^{(1-x_i)} )$
+
+$ln(P(X:q)) = \sum_{i=1}^N (x_i ln(q) +(1-x_i)ln(1-q) )$
+\\ \\
+Maximizando $ln(P(X:q))\equiv L(q)$:
+\\ \\
+$\frac{dL}{dq} = \sum_{i=1}^N(\frac{x_i}{q}-\frac{1-x_i}{1-q})=0$
+
+$\sum_{i=1}^N(\frac{x_i}{q}) = \sum_{i=1}^N(\frac{1-x_i}{1-q})$
+
+$q = \frac{1}{N}\sum_{i=1}^N x_i$
+\end{document}
